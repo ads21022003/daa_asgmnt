@@ -67,16 +67,16 @@
         <div class="controls">
             <label for="product">Product:</label>
             <select id="product">
-                <option value="laptops">Laptops</option>
-                <option value="phones">Smartphones</option>
-                <option value="tablets">Tablets</option>
+                <option value="Els">Laptops</option>
+                <option value="Bron Bosch">Smartphones</option>
+                <option value="Worst Time">Tablets</option>
             </select>
             
             <label for="year">Year:</label>
             <select id="year">
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
+                <option value="Wiki Votes">2022</option>
+                <option value="Enron ">2023</option>
+                <option value="Skittles">2024</option>
             </select>
         </div>
         
@@ -84,10 +84,10 @@
             <div class="stats">
                 <h2>Statistics</h2>
                 <div id="stats-content">
-                    <p>Total Sales: <span class="stat-value" id="total-sales">0</span></p>
-                    <p>Average Price: <span class="stat-value" id="avg-price">$0</span></p>
-                    <p>Growth Rate: <span class="stat-value" id="growth-rate">0%</span></p>
-                    <p>Market Share: <span class="stat-value" id="market-share">0%</span></p>
+                    <p>Total Maximal Cliques: <span class="stat-value" id="total-sales">0</span></p>
+                    <p>Maximum Clique Size: <span class="stat-value" id="avg-price">$0</span></p>
+                    <p>Runtime: <span class="stat-value" id="growth-rate">0%</span></p>
+                 
                 </div>
             </div>
             
@@ -183,8 +183,8 @@
             // Update statistics
             document.getElementById('total-sales').textContent = productData.totalSales.toLocaleString();
             document.getElementById('avg-price').textContent = '$' + productData.avgPrice.toLocaleString();
-            document.getElementById('growth-rate').textContent = productData.growthRate + '%';
-            document.getElementById('market-share').textContent = productData.marketShare + '%';
+            document.getElementById('growth-rate').textContent = productData.growthRate ;
+       
             
             // Update chart
             updateChart(productData.monthlyData, product, year);
