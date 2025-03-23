@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        select {
+            padding: 8px;
+            margin-right: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .stats {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            flex: 2;
+            min-width: 500px;
+            height: 400px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        .stat-value {
+            font-weight: bold;
+            color: #0066cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Dashboard</h1>
+        
+        <div class="controls">
+            <label for="product">Product:</label>
+            <select id="product">
+                <option value="laptops">Laptops</option>
+                <option value="phones">Smartphones</option>
+                <option value="tablets">Tablets</option>
+            </select>
+            
+            <label for="year">Year:</label>
+            <select id="year">
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+            </select>
+        </div>
+        
+        <div class="dashboard">
+            <div class="stats">
+                <h2>Statistics</h2>
+                <div id="stats-content">
+                    <p>Total Sales: <span class="stat-value" id="total-sales">0</span></p>
+                    <p>Average Price: <span class="stat-value" id="avg-price">$0</span></p>
+                    <p>Growth Rate: <span class="stat-value" id="growth-rate">0%</span></p>
+                    <p>Market Share: <span class="stat-value" id="market-share">0%</span></p>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for different products and years
+        const data = {
+            laptops: {
+                2022: {
+                    totalSales: 1250000,
+                    avgPrice: 899,
+                    growthRate: 12.5,
+                    marketShare: 28.3,
+                    monthlyData: [65000, 68000, 75000, 82000, 95000, 110000, 125000, 138000, 120000, 115000, 130000, 127000]
+                },
+                2023: {
+                    totalSales: 1425000,
+                    avgPrice: 950,
+                    growthRate: 14.0,
+                    marketShare: 30.5,
+                    monthlyData: [80000, 85000, 90000, 95000, 110000, 130000, 145000, 150000, 135000, 120000, 140000, 145000]
+                },
+                2024: {
+                    totalSales: 1650000,
+                    avgPrice: 999,
+                    growthRate: 15.8,
+                    marketShare: 32.7,
+                    monthlyData: [95000, 100000, 110000, 120000, 135000, 150000, 165000, 170000, 155000, 140000, 150000, 160000]
+                }
+            },
+            phones: {
+                2022: {
+                    totalSales: 2500000,
+                    avgPrice: 599,
+                    growthRate: 18.2,
+                    marketShare: 35.8,
+                    monthlyData: [180000, 185000, 195000, 200000, 210000, 220000, 230000, 225000, 215000, 210000, 220000, 210000]
+                },
+                2023: {
+                    totalSales: 2850000,
+                    avgPrice: 649,
+                    growthRate: 14.0,
+                    marketShare: 37.2,
+                    monthlyData: [220000, 225000, 230000, 235000, 245000, 250000, 260000, 255000, 240000, 230000, 240000, 220000]
+                },
+                2024: {
+                    totalSales: 3150000,
+                    avgPrice: 699,
+                    growthRate: 10.5,
+                    marketShare: 38.5,
+                    monthlyData: [250000, 255000, 260000, 265000, 275000, 285000, 290000, 285000, 270000, 260000, 270000, 245000]
+                }
+            },
+            tablets: {
+                2022: {
+                    totalSales: 850000,
+                    avgPrice: 449,
+                    growthRate: 8.5,
+                    marketShare: 22.4,
+                    monthlyData: [60000, 62000, 65000, 68000, 72000, 75000, 78000, 76000, 73000, 70000, 72000, 69000]
+                },
+                2023: {
+                    totalSales: 920000,
+                    avgPrice: 479,
+                    growthRate: 8.2,
+                    marketShare: 23.1,
+                    monthlyData: [70000, 72000, 74000, 76000, 80000, 82000, 85000, 83000, 80000, 75000, 77000, 74000]
+                },
+                2024: {
+                    totalSales: 980000,
+                    avgPrice: 499,
+                    growthRate: 6.5,
+                    marketShare: 23.8,
+                    monthlyData: [75000, 77000, 79000, 82000, 85000, 88000, 90000, 88000, 85000, 80000, 83000, 78000]
+                }
+            }
+        };
+
+        // Initialize chart
+        let salesChart = null;
+
+        // Function to update the statistics and chart
+        function updateDashboard() {
+            const product = document.getElementById('product').value;
+            const year = document.getElementById('year').value;
+            const productData = data[product][year];
+            
+            // Update statistics
+            document.getElementById('total-sales').textContent = productData.totalSales.toLocaleString();
+            document.getElementById('avg-price').textContent = '$' + productData.avgPrice.toLocaleString();
+            document.getElementById('growth-rate').textContent = productData.growthRate + '%';
+            document.getElementById('market-share').textContent = productData.marketShare + '%';
+            
+            // Update chart
+            updateChart(productData.monthlyData, product, year);
+        }
+        
+        // Function to update the chart
+        function updateChart(monthlyData, product, year) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            
+            // Destroy existing chart if it exists
+            if (salesChart) {
+                salesChart.destroy();
+            }
+            
+            // Create new chart - using bar chart type instead of line
+            salesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: `Monthly Sales for ${product} (${year})`,
+                        data: monthlyData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Sales (units)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Monthly Sales Histogram - ${product.charAt(0).toUpperCase() + product.slice(1)} (${year})`,
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Sales: ${context.raw.toLocaleString()} units`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Add event listeners to dropdowns
+        document.getElementById('product').addEventListener('change', updateDashboard);
+        document.getElementById('year').addEventListener('change', updateDashboard);
+        
+        // Initialize dashboard with default values
+        updateDashboard();
+    </script>
+</body>
+</html>
